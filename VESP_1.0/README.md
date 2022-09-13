@@ -34,7 +34,7 @@ LDA 0x3F 17 # will do decimal -> hex :D
 
 # doing 8 + MEM[0x40]
 LDA A 8
-MOV B 0x40 # '0x' means its a register
+MOV B 0x40 # '0x' means its an addr
 ADD
 
 HLT
