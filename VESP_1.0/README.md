@@ -4,6 +4,7 @@ Assembler for the VESP 1.0 instruction set
 VESPa supports comments, automatic converstion of hex and decimal values, etc. (see the example below)
 
 __Note:__ VESPa currently (only) does the ADD, LDA, MOV, and HLT instructions.
+* Extra note: VESPa now has a `SUB` pseudo-instruction (`A = B - A`)
 
 ## Usage:
 ```sh
@@ -21,44 +22,44 @@ options:
 
 ## Example:
 ```sh
-❯ cat examples/test.vspa
-# A = 8 + MEM[0x40]
+❯ cat examples/subtract.vspa
+# Test program to show off subtraction
+# MEM[0x30] = 0xAF - 16 # should be 0x9F
 
-# initializing A, B, MEM[0x40]
-LDA A 0 # could load an 8 here
+# set up
+LDA A 0 # can do comments!
 LDA B 0
-LDA 0x40 0xa # hex case doesnt matter
 
-# just for showing off
-LDA 0x3F 17 # will do decimal -> hex :D
+LDA B 0xaf # does hex and decimal conversions for you
+LDA A 16
 
-# doing 8 + MEM[0x40]
-LDA A 8
-MOV B 0x40 # '0x' means its an addr
-ADD
+SUB # A = B - A (does 2's complement for you)
+
+MOV 0x30 A # load answer into MEM[0x30]
 
 HLT
 
-❯ ./VESPa.py -p examples/test.vspa | tee examples/test.vsp
+❯ ./VESPa.py -p examples/subtract.vspa | tee examples/subtract.vsp
 2000
 0000
 2001
 0000
-2040
-000a
-203F
-0011
+2001
+00AF
 2000
-0008
-3001
-0040
+0010
+1000
+0001
+2001
+0001
+0001
+3030
 0000
-7000
+7001                                                     ```
+
+Debug Example:              
 ```
-## Debug example:
-`-d` enables debug info, showing how VESPa modifies values before turning them into VESP instructions
-```sh
-❯ ./VESPa.py -p examples/test.vspa -d
+❯ ./VESPa.py -p examples/subtract.vspa -d
 +['LDA', 'A', '0']
 ++['LDA', '0000', '0000']
 2000
@@ -67,26 +68,26 @@ HLT
 ++['LDA', '0001', '0000']
 2001
 0000
-+['LDA', '0x40', '0xa']
-++['LDA', '0040', '000a']
-2040
-000a
-+['LDA', '0x3F', '17']
-++['LDA', '003F', '0011']
-203F
-0011
-+['LDA', 'A', '8']
-++['LDA', '0000', '0008']
++['LDA', 'B', '0xaf']
+++['LDA', '0001', '00AF']
+2001
+00AF
++['LDA', 'A', '16']
+++['LDA', '0000', '0010']
 2000
-0008
-+['MOV', 'B', '0x40']
-++['MOV', '0001', '0040']
-3001
-0040
-+['ADD']
-++['ADD']
+0010
++['SUB']
+++['SUB']
+1000
+0001
+2001
+0001
+0001
++['MOV', '0x30', 'A']
+++['MOV', '0030', '0000']
+3030
 0000
 +['HLT']
 ++['HLT']
-7000
+7001
 ```
