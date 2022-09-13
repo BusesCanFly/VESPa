@@ -21,6 +21,8 @@ options:
 ```
 
 ## Example:
+### VESPa program: 
+(featuring `SUB` pseudo-instruction)
 ```sh
 ❯ cat examples/subtract.vspa
 # Test program to show off subtraction
@@ -30,7 +32,8 @@ options:
 LDA A 0 # can do comments!
 LDA B 0
 
-LDA B 0xaf # does hex and decimal conversions for you
+# handles hex and decimal conversions for you!
+LDA B 0xaf # hex case doesnt matter
 LDA A 16
 
 SUB # A = B - A (does 2's complement for you)
@@ -38,7 +41,10 @@ SUB # A = B - A (does 2's complement for you)
 MOV 0x30 A # load answer into MEM[0x30]
 
 HLT
+```
 
+### Generating VESP machine code:
+```
 ❯ ./VESPa.py -p examples/subtract.vspa | tee examples/subtract.vsp
 2000
 0000
@@ -55,10 +61,12 @@ HLT
 0001
 3030
 0000
-7001                                                     ```
-
-Debug Example:              
+7001
 ```
+
+### Debug Example:    
+This shows the process the assember takes so you can sanity check it          
+```sh
 ❯ ./VESPa.py -p examples/subtract.vspa -d
 +['LDA', 'A', '0']
 ++['LDA', '0000', '0000']
