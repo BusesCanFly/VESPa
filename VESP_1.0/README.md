@@ -55,13 +55,13 @@ HLT
 2000
 0010
 1000
-0001
+0000
 2001
 0001
-0001
+0000
 3030
 0000
-7001
+7000
 ```
 
 ### Debug Example:    
@@ -87,15 +87,15 @@ This shows the process the assember takes so you can sanity check it
 +['SUB']
 ++['SUB']
 1000
-0001
+0000
 2001
 0001
-0001
+0000
 +['MOV', '0x30', 'A']
 ++['MOV', '0030', '0000']
 3030
 0000
 +['HLT']
 ++['HLT']
-7001
+7000
 ```
