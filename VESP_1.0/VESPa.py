@@ -3,6 +3,15 @@
 # TODO: check if no HLT, add end of line comments, add debug mode
 
 def assemble(programFile):
+  def debug(fields, passNum: int):
+    if args.debug:
+      header = "+"*passNum
+      try:
+        comment = fields.index("#")
+        print(f"{header}{fields[:comment]}")
+      except ValueError: # no comments in line
+        print(f"{header}{fields}") 
+
   filler = "000" # pattern to fill lower part of register (for ADD/HLT/etc.)
   with open(programFile, "r") as program:
     for line in program:
@@ -10,7 +19,7 @@ def assemble(programFile):
         pass
       else:
         fields = line.strip("\n").split(" ")
-        # print(fields)
+        debug(fields, 1)
         for index, field in enumerate(fields):
           if "#" in field: # end of line comments
             break
@@ -23,11 +32,11 @@ def assemble(programFile):
               if "0x" not in field:
                 rawhex = hex(int(field))[2:]
                 padded = "0"*(4-len(rawhex))+rawhex
-                fields[index] = padded
+                fields[index] = padded.upper()
               else:
-                value = field[2:]
+                value = field[2:].upper()
                 fields[index] = "0"*(4-len(value))+value
-        # print(fields)
+        debug(fields, 2)
 
         match fields[0]:
           case "ADD": # A = A + B
@@ -51,6 +60,7 @@ if __name__ == "__main__":
   import argparse
   parser = argparse.ArgumentParser(description='Assemble VESPa assembly to VESP instructions')
   parser.add_argument('-p', '--program', dest='programFile', help='VESPa file to assemble')
+  parser.add_argument('-d', '--debug', dest='debug', action='store_true', help='enable debug info')
   args = parser.parse_args()
 
   assemble(args.programFile)
