@@ -41,6 +41,8 @@ def assemble(programFile):
         match fields[0]:
           case "ADD": # A = A + B
             print(f"0{filler}")
+          case "SUB": #A = B - A
+            print(f"1000\n0{filler}\n2001\n0001\n0{filler}") # TODO: make pseudo-instructions reference cases
           case "CMP": # A = ~A
             print(f"1{filler}")
           case "LDA": # M[IR[3:15] ] = M[MAR+1]
