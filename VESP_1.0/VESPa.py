@@ -12,7 +12,7 @@ def assemble(programFile):
       except ValueError: # no comments in line
         print(f"{header}{fields}") 
 
-  filler = "000" # pattern to fill lower part of register (for ADD/HLT/etc.)
+  filler = "CAB" # pattern to fill lower part of register (for ADD/HLT/etc.)
   with open(programFile, "r") as program:
     for line in program:
       if line[0] == "#" or line == "\n": # ignore comments or blank lines
