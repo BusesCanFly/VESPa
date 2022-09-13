@@ -48,5 +48,9 @@ def assemble(programFile):
             print(f"7{filler}", end="")
 
 if __name__ == "__main__":
-  programFile = "rahul.vspa"
-  assemble(programFile)
+  import argparse
+  parser = argparse.ArgumentParser(description='Assemble VESPa assembly to VESP instructions')
+  parser.add_argument('-p', '--program', dest='programFile', help='VESPa file to assemble')
+  args = parser.parse_args()
+
+  assemble(args.programFile)
